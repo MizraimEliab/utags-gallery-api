@@ -10,9 +10,9 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors());
 
-app.use('/login',require('./routes/user.routes'));
+app.use('/users',require('./routes/users.routes'));
 
-app.listen(3000,()=>{
-    console.log('Server on port', app.get('port'));
-})
-// This is a comment
+app.listen(process.env.PORT, ()=> {
+    console.log("Server On Port ", app.get('port'))
+});
+

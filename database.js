@@ -1,12 +1,12 @@
 const {Pool} = require('pg');
 
 const pool = new Pool({
-    host: '', //localhost
-    user: '', //postgres
-    password: '', //admin
-    database: '', //gallery_db
-    port: '' //5432
+    host:  process.env.HOSTG, //localhost
+    user: process.env.USERG, //postgres
+    password: process.env.PASSG, //postgres
+    database: process.env.DBG, //gallerydb
+    port: process.env.PORTG //5432
 });
-console.log('Base de datos conectada');
+console.log('DB is connected');
 
 module.exports = {Pool,pool}
