@@ -7,9 +7,9 @@ const pool = new Pool({
     //     ca: '',
     //     key: '',
     //     cert: '',
-    //   }, 
+    //   },
     user: 'postgres',//process.env.USERG, //postgres
-    password: 'postgres', //process.env.PASSG, //postgres
+    password: 'root', //process.env.PASSG, //postgres
     database: 'gallerydb', //process.env.DBG, //gallerydb
     port:  '5432'//process.env.PORTG //5432
 });
