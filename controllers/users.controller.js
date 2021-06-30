@@ -9,14 +9,34 @@ const userController = {};
 // Get all users with method get
 userController.getUsers = async(req,res)=>{
     const user = await pool.query('SELECT * FROM users');
-    res.json(user.rows);
+    if (user.rows.length>0){
+        activeusers = [];
+        user.rows.forEach((value) => {
+            if (value.status == true){
+                activeusers.push(value);
+            }
+        });
+        res.json(activeusers)
+        //res.json(user.rows);
+    }else{
+        res.json({Message: 'No users found'})
+    }
+    
 }
 // Get one user with method get
 userController.getUser = async(req,res)=>{
     const id = req.params.id;
     const response = await pool.query('SELECT * FROM users WHERE user_id = $1', [id]);
     console.log(response);
-    res.json(response.rows)
+    if (response.rows.length == 0 || response.rows[0].status == false ){
+        res.json({
+            code : 404,
+            Message: "User not found"
+        });
+    }else{
+        res.json(response.rows);
+    }
+    
 }
 // Get user profile with method get
 userController.profile = async (req, res) =>{
@@ -36,11 +56,12 @@ userController.login = async(req,res)=>{
     await pool.query('SELECT * FROM users WHERE email = $1 OR password = $2',[login.email, login.password], (err, user)=>{
         console.log(user);
         if (err) return res.status(400);
-        if (user.rows.length == 0){
+        if (user.rows.length == 0 || user.rows[0].status == false){
             res.json({
-                status: 'Something is wrong'
+                Message: 'Something is wrong'
             })
         }else{
+           
             // decrypt password
             const resultPassword = bcrypt.compareSync(login.password, user.rows[0].password);
             if(resultPassword){
@@ -48,12 +69,13 @@ userController.login = async(req,res)=>{
                 const accessToken = jwt.sign({ id: user.rows[0].user_id}, Secret_Key, { expiresIn: '1h' })
                 res.json({
                     Message: 'OK User was found',
-                    status: 200,
+                    code: 200,
                     usertype: user.rows[0].usertype,
                     name: user.rows[0].name,
                     lastname: user.rows[0].lastname,
                     email: user.rows[0].email,
                     password: user.rows[0].password,
+                    status: user.rows[0].status,
                     token: accessToken
                 });
 
@@ -72,10 +94,21 @@ userController.postUser = async(req,res)=>{
     // create hash password
     const hash = bcrypt.hashSync(newUser.password, saltRounds);
     // end hash password
-    const addUser = await pool.query('INSERT INTO users (usertype, name,lastname,email,password) VALUES ($1,$2,$3,$4,$5)',[1,newUser.name,newUser.lastname,newUser.email,hash]);
+
+    // check email to determinate user rol
+    let usertype = 0;
+    let regex = new RegExp('^[_A-Za-z\\+]+(\.[_A-Za-z]+)*@utags.edu.mx$');
+    // console.log(regex.test(newUser.email));
+    if (regex.test(newUser.email) == true){
+        usertype = 1
+    }
+    else{
+        usertype = 2
+    }
+    const addUser = await pool.query('INSERT INTO users (usertype, name,lastname,email,password, status) VALUES ($1,$2,$3,$4,$5,$6)',[usertype,newUser.name,newUser.lastname,newUser.email,hash, true]);
     res.json({
         Message: 'User add successfully ',
-        Status: 200,
+        code: 200,
         data: newUser
     })
     
@@ -89,7 +122,7 @@ userController.putUser = async (req, res) =>{
     console.log(response);
     res.json({
         Message: 'User updated successfully ',
-        Status: 200,
+        code: 200,
         UserUpdated : {
             name: name,
             lastname: lastname,
@@ -98,6 +131,21 @@ userController.putUser = async (req, res) =>{
     })
     
 }
+
+// Delete one user with method put
+userController.deleteUser = async (req, res) =>{
+    const id = req.params.id;
+    const { name, lastname, email} = req.body;
+    const response = await pool.query('UPDATE users SET status = $1 WHERE user_id = $2', [false, id ]);
+    console.log(response);
+    res.json({
+        Message: 'User deleted successfully ',
+        code: 200,
+        UserId : id
+    })
+    
+}
+
 
 
 function verifyToken (req, res , next){
