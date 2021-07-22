@@ -4,7 +4,7 @@ const app = express();
 const {pool} = require('./database');
 const cors = require('cors');
 
-const whitelist = ['https://utagsgallery-codes.herokuapp.com', 'localhost:4200']
+const whitelist = ['https://utagsgallery-codes.herokuapp.com', 'https://api-utagsgallery-codes.herokuapp.com','localhost:4200']
 
 const corsOptions = {
     origin: function (origin, callback) {
