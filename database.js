@@ -2,12 +2,12 @@ const {Pool} = require('pg');
 
 const pool = new Pool({
     host:  process.env.HOSTG,//process.env.HOSTG, //localhost
-    // ssl: {
-    //     rejectUnauthorized: false,
-    //     ca: '',
-    //     key: '',
-    //     cert: '',
-    //   },
+    ssl: {
+        rejectUnauthorized: false,
+        ca: '',
+        key: '',
+        cert: '',
+      },
     user: process.env.USERG,//process.env.USERG, //postgres
     password: process.env.PASSG, //process.env.PASSG, //postgres
     database: process.env.DBG, //process.env.DBG, //gallerydb
