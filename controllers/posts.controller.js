@@ -1,5 +1,9 @@
+const { response } = require('express');
 const {pool} = require('../database');
 const postController = {};
+const fetch = require("node-fetch");
+
+arr_images = []
 
 // Get all posts with method get
 postController.getPosts = async(req,res)=>{
@@ -52,6 +56,41 @@ postController.getPost = async(req,res)=>{
 
 }
 
+// Get imagesPost with method get
+postController.getImagesPost = async(req,res)=>{
+    const word = req.params.word;
+    arr_images = []
+    const base_url = 'https://pixabay.com/api/'
+    const api_key = '22598012-ffd573dbbd295bea2b3baef64'
+    await fetch(base_url + "?key=" + api_key + "&q=" + word)
+    .then(function(response) {
+        console.log('response.body =', response.body);
+        console.log('response.bodyUsed =', response.bodyUsed);
+        console.log('response.headers =', response.headers);
+        console.log('response.ok =', response.ok);
+        console.log('response.status =', response.status);
+        console.log('response.statusText =', response.statusText);
+        console.log('response.type =', response.type);
+        console.log('response.url =', response.url);
+        return response.json();
+     
+    })
+    .then(function(data) {
+        console.log('data = ', data);
+        arr = []
+        arr = data.hits
+        arr.forEach(logArrayElements);
+        return this.arr_images
+
+    })
+    .catch(function(err) {
+        console.error(err);
+    });
+
+
+res.json({images:arr_images})
+
+}
 
 
 // Create one post with method post
@@ -151,6 +190,18 @@ postController.deletePost = async (req, res) =>{
         code: 200,
         PostId : id
     })
+
+}
+
+function logArrayElements(element, index) {
+    if(index <5){
+      arr_images.push(element.largeImageURL)
+    }
+
+
+}
+
+function api_images_pixabay(image_search) {
 
 }
 
