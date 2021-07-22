@@ -9,7 +9,7 @@ app.set('port',process.env.PORT || 3000);
 
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(cors({origin: ['https://utagsgallery-codes.herokuapp.com', 'localhost:4200']})); //http://localhost:4200 {origin: 'https://utagsgallery-codes.herokuapp.com'}
+app.use(cors({origin: ['https://utagsgallery-codes.herokuapp.com', 'http://localhost:4200']})); //http://localhost:4200 {origin: 'https://utagsgallery-codes.herokuapp.com'}
 
 app.use('/users',require('./routes/users.routes'));
 app.use('/channels',require('./routes/channels.routes'));
