@@ -38,7 +38,7 @@ tagsController.getTag = async(req,res)=>{
 // Get posts by tag with method GET
 tagsController.getTagDetails = async(req,res)=>{
     const id = req.params.id;
-    const tag = await pool.query('SELECT tags.tag_id, tags.name, tags.color, posts.post_id, posts.title, posts.content, posts.views, posts.likes FROM posts_tags INNER JOIN tags ON tags.tag_id = posts_tags.tag_id INNER JOIN posts ON posts.post_id = posts_tags.post_id WHERE tags.tag_id = $1',[id]);
+    const tag = await pool.query('SELECT tags.tag_id, tags.name, tags.color, posts.post_id,posts.image_url, posts.title, posts.content, posts.views, posts.likes FROM posts_tags INNER JOIN tags ON tags.tag_id = posts_tags.tag_id INNER JOIN posts ON posts.post_id = posts_tags.post_id WHERE tags.tag_id = $1',[id]);
     console.log(tag);
       if (tag.rows.length == 0 || tag.rows[0].status == false ){
           res.json({

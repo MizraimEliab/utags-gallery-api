@@ -39,13 +39,23 @@ channelController.getChannel = async(req,res)=>{
 // Create one chanell with method post
 channelController.postChannel = async(req,res)=>{
     const newChannel = {user_id,name,description} = req.body;
+    const querychannel = await pool.query('SELECT * FROM channels WHERE user_id = $1', [newChannel.user_id]);
+    if (querychannel.rowCount>0){
+        res.json({
+            Message: 'Cannot create a new channel, your user has one channel now',
+            code: 403
+        });
+    }else{
+        const addChannel =  pool.query('INSERT INTO channels (user_id,name,description,postquantity,suscribers,status) VALUES ($1,$2,$3,$4,$5,$6)',[newChannel.user_id,newChannel.name,newChannel.description,0,0,true]);
+        res.json({
+            Message: 'Channel added successfully ',
+            code: 200,
+            data: newChannel
+        });
+        
+    }
 
-    const addChannel = await pool.query('INSERT INTO channels (user_id,name,description,postquantity,suscribers,status) VALUES ($1,$2,$3,$4,$5,$6)',[newChannel.user_id,newChannel.name,newChannel.description,0,0,true]);
-    res.json({
-        Message: 'Channel add successfully ',
-        code: 200,
-        data: newChannel
-    })
+    
 
 }
 

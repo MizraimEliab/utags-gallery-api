@@ -61,7 +61,7 @@ postController.getImagesPost = async(req,res)=>{
     const word = req.params.word;
     arr_images = []
     const base_url = 'https://pixabay.com/api/'
-    const api_key = '22598012-ffd573dbbd295bea2b3baef64'
+    const api_key = process.env.API_KEY //22598012-ffd573dbbd295bea2b3baef64
     await fetch(base_url + "?key=" + api_key + "&q=" + word)
     .then(function(response) {
         console.log('response.body =', response.body);

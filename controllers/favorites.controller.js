@@ -5,7 +5,7 @@ const favoritesController = {};
 // Get all tags by user with method get
 favoritesController.getFavorites = async (req, res) => {
     const id = req.params.id;
-    const fav = await pool.query('SELECT favorites.favorite_id,users.user_id,posts.post_id,favorites.status,posts.title,posts.content,posts.views, posts.likes FROM favorites INNER JOIN users ON users.user_id = favorites.user_id INNER JOIN posts ON posts.post_id = favorites.post_id WHERE users.user_id = $1',[id]);
+    const fav = await pool.query('SELECT favorites.favorite_id,users.user_id,posts.post_id,posts.image_url,favorites.status,posts.title,posts.content,posts.views, posts.likes FROM favorites INNER JOIN users ON users.user_id = favorites.user_id INNER JOIN posts ON posts.post_id = favorites.post_id WHERE users.user_id = $1',[id]);
     if (fav.rows.length>0){
         activefavs = [];
         fav.rows.forEach((value) => {
@@ -23,7 +23,6 @@ favoritesController.getFavorites = async (req, res) => {
 favoritesController.MarkFavorite = async (req, res) => {
     const record = {user_id,post_id} = req.body;
     const queryfavorite = await pool.query('SELECT * FROM favorites WHERE user_id = $1 AND post_id = $2', [record.user_id, record.post_id]);
-    console.log(queryfavorite.rows);
     if (queryfavorite.rowCount>0 && queryfavorite.rows[0].status == false){
         
         // update post to favorites
