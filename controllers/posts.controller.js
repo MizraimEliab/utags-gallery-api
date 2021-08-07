@@ -95,9 +95,9 @@ res.json({images:arr_images})
 
 // Create one post with method post
 postController.postPost = async(req,res)=>{
-    const newPost = {channel_id,title,content} = req.body;
+    const newPost = {channel_id,title,content,image_url} = req.body;
     
-    const addPost = await pool.query('INSERT INTO posts (channel_id,title,content,views,likes,status) VALUES ($1,$2,$3,$4,$5,$6)',[newPost.channel_id,newPost.title,newPost.content,0,0,true]);
+    const addPost = await pool.query('INSERT INTO posts (channel_id,title,content,views,likes,status,image_url) VALUES ($1,$2,$3,$4,$5,$6,$7)',[newPost.channel_id,newPost.title,newPost.content,0,0,true,newPost.image_url]);
     res.json({
         Message: 'Post add successfully ',
         code: 200,
