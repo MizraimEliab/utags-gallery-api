@@ -3,8 +3,6 @@ const router = express.Router();
 const userController = require('../controllers/users.controller.js');
 
 
-// https://api.utagsgallery.codes
-// https://utagsgallery.codes
 router.get('/',userController.getUsers);
 router.get('/profile', userController.profile);
 router.get('/:id',userController.getUser);

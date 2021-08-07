@@ -14,6 +14,9 @@ app.use(cors({origin: ['https://utagsgallery-codes.herokuapp.com', 'http://local
 app.use('/users',require('./routes/users.routes'));
 app.use('/channels',require('./routes/channels.routes'));
 app.use('/posts',require('./routes/posts.routes'));
+app.use('/tags', require('./routes/tags.routes'));
+app.use('/favorites',require('./routes/favorites.routes'));
+
 
 app.listen(3000, ()=>{//process.env.PORT, ()=> {
     console.log("Server On Port ", app.get('port'))

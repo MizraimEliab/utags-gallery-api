@@ -18,7 +18,7 @@ channelController.getChannels = async(req,res)=>{
 
 }
 
-// Get all channels with method get
+// Get one channel with method get
 channelController.getChannel = async(req,res)=>{
     const id = req.params.id;
     const channel = await pool.query('SELECT * FROM channels WHERE channel_id = $1',[id]);
