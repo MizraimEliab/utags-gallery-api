@@ -65,7 +65,7 @@ postController.getPost = async(req,res)=>{
             res.json({
                     Message: 'Post viewed successfully ',
                     code: 200,
-                    data : pst.rows[0]
+                    data : [pst.rows[0]]
                 })
 
         }
