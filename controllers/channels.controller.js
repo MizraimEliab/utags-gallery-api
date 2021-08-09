@@ -17,6 +17,24 @@ channelController.getChannels = async(req,res)=>{
     }
 }
 
+// Get posts by channels with method get
+channelController.getPostsByChannel = async(req,res)=>{
+    const channel_id = req.params.channel_id;
+    const channel = await pool.query('SELECT posts.post_id,posts.channel_id,posts.title,posts.content,posts.views,posts.likes,posts.status,posts.image_url,posts.created_at,posts.updated_at FROM posts INNER JOIN channels ON posts.channel_id = channels.channel_id WHERE channels.channel_id = $1',[channel_id]);
+    if (channel.rows.length>0){
+        activechannel = [];
+        channel.rows.forEach((value) => {
+            if (value.status == true){
+                activechannel.push(value);
+            }
+        });
+        res.json(activechannel)
+      }else{
+        res.json({Message: 'No channels found'})
+    }
+}
+
+
 // Get one channel with method get
 channelController.getChannel = async(req,res)=>{
     const id = req.params.id;

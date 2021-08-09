@@ -4,6 +4,7 @@ const channelController = require('../controllers/channels.controller');
 
 router.get('/',channelController.getChannels);
 router.get('/:id',channelController.getChannel);
+router.get('/posts/:channel_id', channelController.getPostsByChannel);
 router.post('/',channelController.postChannel);
 router.put('/:id',channelController.putChannel);
 router.put('/delete/:id',channelController.deleteChannel);
