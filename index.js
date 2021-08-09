@@ -17,9 +17,9 @@ app.use('/posts',require('./routes/posts.routes'));
 app.use('/comments', require('./routes/comments.routes'));
 app.use('/tags', require('./routes/tags.routes'));
 app.use('/favorites',require('./routes/favorites.routes'));
+app.use('/suscriptions', require('./routes/suscriptions.routes'));
 
-
-app.listen(3000, ()=>{//process.env.PORT, ()=> {
+app.listen(process.env.PORT, ()=> {
     console.log("Server On Port ", app.get('port'))
 });
 

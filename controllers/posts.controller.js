@@ -23,6 +23,25 @@ postController.getPosts = async(req,res)=>{
 }
 
 
+// Get all posts suscription with method get
+postController.getPostsSuscription = async(req,res)=>{
+    const user_id = req.params.user_id;
+    const post = await pool.query('SELECT * FROM posts INNER JOIN channels ON posts.channel_id = channels.channel_id INNER JOIN users ON users.user_id = channels.user_id INNER JOIN suscriptions ON users.user_id = suscriptions.user_id WHERE suscriptions.user_id = $1 AND posts.status = true AND suscriptions.status = true',[user_id]);
+    if (post.rows.length>0){
+        activepost = [];
+        post.rows.forEach((value) => {
+            if (value.status == true){
+                activepost.push(value);
+            }
+        });
+        res.json(activepost)
+      }else{
+        res.json({Message: 'No posts found'})
+      }
+
+}
+
+
 // Get one post with method get
 postController.getPost = async(req,res)=>{
     const id = req.params.id;
@@ -96,8 +115,12 @@ res.json({images:arr_images})
 // Create one post with method post
 postController.postPost = async(req,res)=>{
     const newPost = {channel_id,title,content,image_url} = req.body;
-    
-    const addPost = await pool.query('INSERT INTO posts (channel_id,title,content,views,likes,status,image_url) VALUES ($1,$2,$3,$4,$5,$6,$7)',[newPost.channel_id,newPost.title,newPost.content,0,0,true,newPost.image_url]);
+    const postquantity = await pool.query('SELECT postquantity FROM channels WHERE channel_id = $1',[channel_id]);
+    console.log(postquantity.rows[0].postquantity);
+    var nepostquantity = postquantity.rows[0].postquantity;
+    var newpostadded = runDecorator(nepostquantity);
+    pool.query('UPDATE channels SET postquantity = $1 WHERE channel_id = $2',[newpostadded,newPost.channel_id]);
+    const addPost = pool.query('INSERT INTO posts (channel_id,title,content,views,likes,status,image_url) VALUES ($1,$2,$3,$4,$5,$6,$7)',[newPost.channel_id,newPost.title,newPost.content,0,0,true,newPost.image_url]);
     res.json({
         Message: 'Post add successfully ',
         code: 200,
@@ -201,8 +224,6 @@ function logArrayElements(element, index) {
 
 }
 
-function api_images_pixabay(image_search) {
 
-}
 
 module.exports = postController;

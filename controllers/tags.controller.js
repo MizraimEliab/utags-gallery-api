@@ -35,6 +35,25 @@ tagsController.getTag = async(req,res)=>{
 }
 
 
+// get tags by user and post
+tagsController.getTagsPosts = async(req,res)=>{
+    const user_id = req.params.user_id;
+    const post_id = req.params.post_id;
+    const tag = await pool.query('SELECT tags.tag_id,tags.name,tags.color,tags.status,posts.title,posts.content,posts.post_id FROM tags INNER JOIN posts_tags ON tags.tag_id = posts_tags.tag_id INNER JOIN posts ON posts.post_id = posts_tags.post_id WHERE tags.user_id = $1 AND posts.post_id = $2',[user_id, post_id]);
+
+    console.log(tag);
+      if (tag.rows.length == 0 || tag.rows[0].status == false ){
+          res.json({
+              code : 404,
+              Message: "Tag not found"
+          });
+      }else{
+          res.json(tag.rows);
+    }
+
+}
+
+
 // Get posts by tag with method GET
 tagsController.getTagDetails = async(req,res)=>{
     const id = req.params.id;
@@ -102,6 +121,21 @@ tagsController.deleteTag = async (req, res) =>{
         Message: 'Tag deleted successfully ',
         code: 200,
         TagId : id
+    })
+
+}
+
+
+// Delete one tag by post with method put
+tagsController.deleteTagByPost = async (req, res) =>{
+    const tag_id = req.params.tag_id;
+    const post_id = req.params.post_id;
+    const response = await pool.query('DELETE FROM posts_tags WHERE tag_id = $1 AND post_id = $2', [tag_id, post_id]);
+    console.log(response);
+    res.json({
+        Message: 'Tag deleted successfully ',
+        code: 200,
+        TagId : tag_id
     })
 
 }
