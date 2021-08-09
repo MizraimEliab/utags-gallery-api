@@ -14,8 +14,7 @@ channelController.getChannels = async(req,res)=>{
         res.json(activechannel)
       }else{
         res.json({Message: 'No channels found'})
-      }
-
+    }
 }
 
 // Get one channel with method get
@@ -31,7 +30,7 @@ channelController.getChannel = async(req,res)=>{
           });
       }else{
           res.json(channel.rows);
-      }
+    }
 
 }
 
