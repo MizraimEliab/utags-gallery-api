@@ -217,7 +217,7 @@ postController.deletePost = async (req, res) =>{
 }
 
 function logArrayElements(element, index) {
-    if(index <5){
+    if(index <6){
       arr_images.push(element.largeImageURL)
     }
 
