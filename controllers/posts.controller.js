@@ -46,7 +46,7 @@ postController.getPostsSuscription = async(req,res)=>{
 postController.getPost = async(req,res)=>{
     const id = req.params.id;
     await pool.query('SELECT * FROM posts WHERE post_id = $1',[id], (err, pst) =>{
-        console.log(pst);
+        console.log(typeof pst);
         if (pst.rows.length == 0 || pst.rows[0].status == false || pst.rows == 'undefined'){
             res.json({
                 code : 404,
