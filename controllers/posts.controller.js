@@ -47,7 +47,7 @@ postController.getPost = async(req,res)=>{
     const id = req.params.id;
     await pool.query('SELECT * FROM posts WHERE post_id = $1',[id], (err, pst) =>{
         console.log(pst);
-        if (pst.rows.length == 0 || pst.rows[0].status == false){
+        if (pst.rows.length == 0 || pst.rows[0].status == false || pst.rows == 'undefined'){
             res.json({
                 code : 404,
                 Message: "Post not found"
