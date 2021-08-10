@@ -45,31 +45,30 @@ postController.getPostsSuscription = async(req,res)=>{
 // Get one post with method get
 postController.getPost = async(req,res)=>{
     const id = req.params.id;
-    await pool.query('SELECT * FROM posts WHERE post_id = $1',[id], (err, pst) =>{
-        console.log(typeof pst);
-        if (pst.rows.length == 0 || pst.rows[0].status == false || pst.rows == 'undefined'){
-            res.json({
-                code : 404,
-                Message: "Post not found"
-            });
-        }else{
-            var viewsnumber = pst.rows[0].views
-            var newviewsnumber = runDecorator(viewsnumber)
-            
-            console.log(newviewsnumber);
+    const query = await pool.query('SELECT * FROM posts WHERE post_id = $1',[id]) 
+       
+    if (query.rows.length == 0 || query.rows[0].status == false || query.rows == 'undefined'){
+        res.json({
+            code : 404,
+            Message: "Post not found"
+        });
+    }else{
+        var viewsnumber = pst.rows[0].views
+        var newviewsnumber = runDecorator(viewsnumber)
+        
+        console.log(newviewsnumber);
 
-            const response = pool.query('UPDATE posts SET views = $1 WHERE post_id = $2', [newviewsnumber,id]);
-            console.log(response);
+        const response = pool.query('UPDATE posts SET views = $1 WHERE post_id = $2', [newviewsnumber,id]);
+        console.log(response);
 
-            pst.rows[0].views = pst.rows[0].views + 1
-            res.json({
-                    Message: 'Post viewed successfully ',
-                    code: 200,
-                    data : [pst.rows[0]]
-                })
+        pst.rows[0].views = pst.rows[0].views + 1
+        res.json({
+                Message: 'Post viewed successfully ',
+                code: 200,
+                data : [pst.rows[0]]
+            })
 
-        }
-    });
+    }
 
  
 
