@@ -69,11 +69,11 @@ postController.getPost = async(req,res)=>{
         const response = pool.query('UPDATE posts SET views = $1 WHERE post_id = $2', [newviewsnumber,id]);
         console.log(response);
 
-        pst.rows[0].views = pst.rows[0].views + 1
+        query.rows[0].views = query.rows[0].views + 1
         res.json({
                 Message: 'Post viewed successfully ',
                 code: 200,
-                data : [pst.rows[0]]
+                data : [query.rows[0]]
             })
 
     }
