@@ -61,7 +61,7 @@ postController.getPost = async(req,res)=>{
             Message: "Post not found"
         });
     }else{
-        var viewsnumber = pst.rows[0].views
+        var viewsnumber = query.rows[0].views
         var newviewsnumber = runDecorator(viewsnumber)
         
         console.log(newviewsnumber);
