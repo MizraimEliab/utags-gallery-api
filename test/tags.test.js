@@ -1,5 +1,5 @@
 const {getTags, getTag, postTag, putTag, deleteTag} = require('../controllers/tags.controller');
-const assert = require('assert');+
+const assert = require('assert');
 
 describe('tags', function() {
     it('How many parameter wait getTags function', function() {
