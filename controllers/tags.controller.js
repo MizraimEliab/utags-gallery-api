@@ -1,6 +1,5 @@
 const {pool} = require('../database');
 const tagsController = {};
-
 // Get all tags by user with method get
 tagsController.getTags = async (req, res) => {
     const id = req.params.id;
