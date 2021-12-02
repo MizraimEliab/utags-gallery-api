@@ -7,7 +7,7 @@ arr_images = []
 
 // Get all posts with method get
 postController.getPosts = async(req,res)=>{
-    const post = await pool.query('SELECT * FROM posts');
+    const post = await pool.query('SELECT * FROM posts ORDER BY post_id DESC');
     if (post.rows.length>0){
         activepost = [];
         post.rows.forEach((value) => {
