@@ -2,7 +2,7 @@ const { response } = require('express');
 const {pool} = require('../database');
 const postController = {};
 const fetch = require("node-fetch");
-//const Notification = require("../notifications");
+
 
 arr_images = []
 
@@ -131,12 +131,7 @@ postController.postPost = async(req,res)=>{
     var newpostadded = runDecorator(nepostquantity);
     pool.query('UPDATE channels SET postquantity = $1 WHERE channel_id = $2',[newpostadded,newPost.channel_id]);
     const addPost = pool.query('INSERT INTO posts (channel_id,title,content,views,likes,status,image_url) VALUES ($1,$2,$3,$4,$5,$6,$7)',[newPost.channel_id,newPost.title,newPost.content,0,0,true,newPost.image_url]);
-    //const data = {
-        //topic: "notification",
-        //title: "Post Added",
-        //message: "Post added successfully"
-    //}
-    //Notification.SendPushToTopic(data)
+
     res.json({
         Message: 'Post add successfully ',
         code: 200,
