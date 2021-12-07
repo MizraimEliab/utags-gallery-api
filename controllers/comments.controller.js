@@ -5,6 +5,7 @@ const commentsController = {};
 commentsController.getComments = async(req,res)=>{
     const id = req.params.id;
     const comments = await pool.query('SELECT * FROM comments WHERE post_id = $1 ORDER BY comments_id DESC', [id]);
+    
     if (comments.rows.length>0){
         activecomments = [];
         comments.rows.forEach((value) => {
